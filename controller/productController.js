@@ -6,7 +6,7 @@ export const getProducts = async (req,res) => {
         const products = await Product.find({})
         return res.status(200).json({
             status: 'success',
-            data: products,
+            products,
         });
     } catch (err) {
         return res.status(404).json({
@@ -25,19 +25,19 @@ export const getProduct = async(req,res) => {
 
         return res.status(200).json({
             status: 'Success',
-            data: isExist
+            product: isExist
         })
     } catch (err) {
         return res.status(500).json({
             status: 'Error',
-            data: err.message
+            message: err.message
         })
     }
 };
 
 
 export const createProduct = async(req,res) => {
-    const {title, price, detail, image, category, brand}= req.body ?? {};
+    const {title, price, detail, image, category, stock, brand}= req.body ?? {};
     // const file = req.files.image;
     // file.mv(`./uploads/${file.name}`,(err)=>{
 
@@ -51,6 +51,7 @@ export const createProduct = async(req,res) => {
             detail,
             image: req.imagePath,
             category,
+            stock,
             brand
         })
         res.status(201).json({
@@ -63,7 +64,7 @@ export const createProduct = async(req,res) => {
         fs.unlink(`./uploads/${req.imagePath}`, (error)=> {
             return res.status(400).json({
                 status: 'Error',
-                data: err.message
+                message: err.message
             })
         });
         
@@ -73,19 +74,18 @@ export const createProduct = async(req,res) => {
 
 
 export const updateProduct = async(req,res) => {
-    const {title, price, detail, category, brand}= req.body ?? {};
+    const {title, price, detail, category, stock, brand} = req.body ?? {};
 
     try {
         const isExist = await Product.findById(req.id);
 
         if(!isExist) {
             if(req.imagePath) {
-                fs.unlinkSync(`./uploads/${req.imagePath}`, (err)=> {
+                fs.unlinkSync(`./uploads/${req.imagePath}`);
                     return res.status(404).json({
                         status: 'success',
                         data: 'Product not found'
                     });
-                })
             } else {
                 return res.status(404).json({
                     status: 'Error',
@@ -99,6 +99,7 @@ export const updateProduct = async(req,res) => {
         isExist.price =price || isExist.price;
         isExist.detail =detail || isExist.detail;
         isExist.category = category || isExist.category;
+        isExist.stock = stock || isExist.stock;
         isExist.brand = brand || isExist.brand;
         await isExist.save();
 
@@ -110,7 +111,7 @@ export const updateProduct = async(req,res) => {
                 return res.status(200).json({
                     status: 'Success',
                     data: 'Product successfully updated'
-                })
+                });
             })
 
         } else {
@@ -128,13 +129,13 @@ export const updateProduct = async(req,res) => {
                 fs.unlink(`./uploads/${req.imagePath}`, (error)=> {
                     return res.status(500).json({
                         status: 'success',
-                        data: err.message
+                        message: err.message
                     });
                 });
             }else {
                 return res.status(500).json({
                     status: 'Error',
-                    data: err
+                    message: err.message
                 });
             }
         
@@ -160,7 +161,7 @@ export const deleteProduct = async (req,res) => {
     } catch (err) {
         return res.status(500).json({
             status: 'Error',
-            data: err.message
+            message: err.message
         })
     }
 };

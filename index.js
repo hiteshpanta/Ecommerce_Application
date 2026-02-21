@@ -8,7 +8,7 @@ import cors from 'cors';
 
 const app = express();
 
-const port = 6000;
+const port = 5000;
 
 mongoose.connect('mongodb+srv://hiteshpant50:alright@cluster0.fbhzw9j.mongodb.net/Ercel_Store').then((val)=>{
     app.listen(port,()=>{
@@ -18,11 +18,15 @@ mongoose.connect('mongodb+srv://hiteshpant50:alright@cluster0.fbhzw9j.mongodb.ne
     console.log(err);
 });
 
+app.use(cors());
 app.use(express.json());
 
 app.use(fileUpload({
   limits: { fileSize: 5 * 1024 * 1024 },
 }));
+
+
+app.use(express.static('uploads'))
 
 const transporter = nodemailer.createTransport({
     host: 'smtp.gamil.com',
@@ -78,7 +82,6 @@ app.post('/send-email', async(req,res) => {
     
 // });
 
-app.use(cors());
 
 app.use(userRoutes)
 app.use(productRoutes);

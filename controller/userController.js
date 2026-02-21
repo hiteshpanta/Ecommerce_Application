@@ -4,9 +4,9 @@ import jwt from 'jsonwebtoken';
 
 
 export const loginUser = async (req,res) => {
-    const { email, password } = req.body ?? {};
+    const { email, password,username } = req.body ?? {};
     try {
-        const isExist = await User.findOne({ email });
+        const isExist = email ? await User.findOne({ email }) : await User.findOne({ username });
 
         if (!isExist) return res.status(404).json({
             status: 'Error',
@@ -36,7 +36,7 @@ export const loginUser = async (req,res) => {
 
     } catch (err) {
         return res.status(500).json({
-            status: 'Error',
+            status: 'error',
             data: err.message
         })
     }

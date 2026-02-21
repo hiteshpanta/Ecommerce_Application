@@ -6,6 +6,8 @@ const supportedExts = ['.png','.jpg', '.jpeg', '.gif'];
 
 export const checkFile = (req,res, next) => {
     const file = req.files?.image;
+
+    
     if(!file) return res.status(400).json({
         status: 'Error',
         data: 'Please provide image file'
