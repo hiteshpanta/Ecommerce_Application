@@ -1,4 +1,4 @@
-import { UserIcon, SettingsIcon, BellIcon, LogOutIcon, CreditCardIcon } from 'lucide-react'
+import { UserIcon,  LogOutIcon, ShoppingCart, LayoutDashboard } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -9,31 +9,47 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import { useDispatch } from 'react-redux';
+import { removeUser } from '@/features/user/userSlice';
+import { useNavigate } from 'react-router';
 
-const listItems = [
+const userItems = [
   {
     icon: UserIcon,
     property: 'Profile'
   },
   {
-    icon: SettingsIcon,
-    property: 'Settings'
+    icon: ShoppingCart,
+    property: 'Cart'
   },
-  {
-    icon: CreditCardIcon,
-    property: 'Billing'
-  },
-  {
-    icon: BellIcon,
-    property: 'Notifications'
-  },
+  
   {
     icon: LogOutIcon,
     property: 'Sign Out'
   }
 ]
 
-export default function DropDownProfile() {
+const adminItems =[
+  {
+    icon: UserIcon,
+    property: 'Profile'
+  },
+  {
+    icon: LayoutDashboard,
+    property: 'admin-panel'
+  },
+  {
+    icon: LogOutIcon,
+    property: 'Sign Out'
+  }
+];
+
+export default function DropDownProfile({ user }) {
+  const listItems = user.role === 'user' ? userItems : adminItems;
+  const dispatch = useDispatch();
+  const nav = useNavigate();
+
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -45,7 +61,19 @@ export default function DropDownProfile() {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuGroup>
           {listItems.map((item, index) => (
-            <DropdownMenuItem key={index}>
+            <DropdownMenuItem 
+          
+              onClick= {()=> {
+                switch(item.property){
+                  case 'Sign Out':
+                    dispatch(removeUser());
+                  break;
+                  case 'admin-panel':
+                    nav('/admin-panel')
+                  break;
+                }
+              }}
+              key={index}>
               <item.icon />
               <span className='text-popover-foreground'>{item.property}</span>
             </DropdownMenuItem>

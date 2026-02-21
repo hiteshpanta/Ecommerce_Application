@@ -1,57 +1,38 @@
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Button } from '@/components/ui/button'
-import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
+
 import React from 'react'
-import Login from "../authentication/Login"
+
+import { useGetProductsQuery } from "../products/productApi"
+import ProductCard from "../products/ProductCard"
+import { Skeleton } from '@/components/ui/skeleton';
+import ProductCardSkeleton from '../products/ProductCardSkeleton';
 
 export default function Home() {
+  const { isLoading, error, data} = useGetProductsQuery();
+  if (isLoading) return <div className='grid grid-cols-4 gap-6 mt-4 items-start'>
+            <ProductCardSkeleton />
+            <ProductCardSkeleton />
+            <ProductCardSkeleton />            
+            <ProductCardSkeleton />
+            <ProductCardSkeleton />
+            <ProductCardSkeleton />
+            <ProductCardSkeleton />
+            <ProductCardSkeleton />
+        </div>
+  if (error) return <h1 className="text-pink-950">{error}</h1>
   return (
     <div>
-      <h3>This is home page</h3>
-
-      <Button>Button</Button>
 
 
+      <h1>Wellcome To Online Shopping</h1>
 
+      <div className='grid grid-cols-4 gap-6 mt-4 items-start'>
+         {data?.products.map((product) => {
+            return <ProductCard key={product._id} product={product}/>
 
-<NativeSelect>
-      <NativeSelectOption value="">Select status</NativeSelectOption>
-      <NativeSelectOption value="todo">Todo</NativeSelectOption>
-      <NativeSelectOption value="in-progress">In Progress</NativeSelectOption>
-      <NativeSelectOption value="done">Done</NativeSelectOption>
-      <NativeSelectOption value="cancelled">Cancelled</NativeSelectOption>
-</NativeSelect>
-    
-
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button variant="outline">Show Dialog</Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+          })}
+      </div>
+     
  
 
     </div>

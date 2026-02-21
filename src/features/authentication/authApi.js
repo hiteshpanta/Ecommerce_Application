@@ -4,7 +4,7 @@ import { mainApi } from '@/app/mainApi';
 
 
 
-export const authApi = mainApi.injectEndpoints({
+const authApi = mainApi.injectEndpoints({
     endpoints: (builder) => ({
 
 
@@ -13,6 +13,14 @@ export const authApi = mainApi.injectEndpoints({
                 url: '/users/login',
                 method: 'POST',
                 body: body
+            }),
+        }),
+
+        userRegister: builder.mutation({
+            query: (body) => ({
+                url: '/users/register',
+                method: 'POST',
+                body: body,
             })
         }),
 
@@ -22,4 +30,4 @@ export const authApi = mainApi.injectEndpoints({
     })
 })
 
-export const {useUserLoginMutation} = authApi;
+export const { useUserLoginMutation, useUserRegisterMutation } = authApi;
