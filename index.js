@@ -2,6 +2,7 @@ import express, { json } from 'express';
 import mongoose from 'mongoose';
 import userRoutes from './routes/userRoutes.js'
 import productRoutes from './routes/productRoutes.js'
+import orderRoutes from './routes/orderRoutes.js';
 import nodemailer from 'nodemailer';
 import fileUpload from 'express-fileupload';
 import cors from 'cors';
@@ -85,6 +86,7 @@ app.post('/send-email', async(req,res) => {
 
 app.use(userRoutes)
 app.use(productRoutes);
+app.use(orderRoutes);
 
 
 

@@ -1,0 +1,12 @@
+import express from 'express'
+import { createOrder, getOrders } from '../controller/orderController.js'
+import { notAllowed } from '../utils/notAllowed.js'
+import { checkUser } from '../middleware/checkUser.js';
+
+
+
+const router = express.Router();
+
+router.route('/api/orders').get(checkUser,getOrders).post(checkUser,createOrder).all(notAllowed)
+
+export default router;

@@ -31,7 +31,30 @@ const UserSchema = new mongoose.Schema({
 
         },
         default: 'user'
-    }
+    },
+    order: [
+        {
+            products: [
+                {
+                    productId: {
+                        type: mongoose.Schema.Types.ObjectId,
+                        ref: 'Product',
+                        required: true,
+                    },
+                    quantity: {
+                            type: Number,
+                            required: true,
+                    }
+                    
+                }
+            ],
+            totalAmount: {
+                type: Number,
+                required: true
+            }
+
+        }
+    ]
 }, {timestamps: true});
 
 const User = mongoose.model('User', UserSchema) ;

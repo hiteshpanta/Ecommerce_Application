@@ -37,7 +37,7 @@ export const getProduct = async(req,res) => {
 
 
 export const createProduct = async(req,res) => {
-    const {title, price, detail, image, category, stock, brand}= req.body ?? {};
+    const {title, price, detail, image, category, stock, brand} = req.body ?? {};
     // const file = req.files.image;
     // file.mv(`./uploads/${file.name}`,(err)=>{
 
@@ -151,7 +151,7 @@ export const deleteProduct = async (req,res) => {
             data: 'Product not found'
         });
         fs.unlink(`./uploads/${isExist.image}`, async (err)=> {
-            await Product.deleteOne();
+            await isExist.deleteOne();
             return res.status(200).json({
                 status: 'Success',
                 data: 'Product deleted successfully'
