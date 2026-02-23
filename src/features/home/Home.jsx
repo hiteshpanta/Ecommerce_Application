@@ -4,7 +4,6 @@ import React from 'react'
 
 import { useGetProductsQuery } from "../products/productApi"
 import ProductCard from "../products/ProductCard"
-import { Skeleton } from '@/components/ui/skeleton';
 import ProductCardSkeleton from '../products/ProductCardSkeleton';
 
 export default function Home() {
@@ -24,9 +23,9 @@ export default function Home() {
     <div>
 
 
-      <h1>Wellcome To Online Shopping</h1>
+      <h1 className='text-center text-zinc-300'>Wellcome To Online Shopping Store</h1>
 
-      <div className='grid grid-cols-4 gap-6 mt-4 items-start'>
+      <div className='grid grid-cols-4 gap-6 mt-20 items-start'>
          {data?.products.map((product) => {
             return <ProductCard key={product._id} product={product}/>
 
