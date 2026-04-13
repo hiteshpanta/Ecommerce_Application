@@ -25,14 +25,14 @@ export default function Order() {
                     return <div key={item._id} >
                         <div>
                             <Avatar className="size-20">
-                                <AvatarImage src={`${base}/${item.product.image}`} alt="@shadcn"/>
+                                <AvatarImage src={`${base}/${item.product?.image}`} alt="@shadcn"/>
                                 <AvatarFallback>CN</AvatarFallback>
                             </Avatar>
                             
                         </div>
                         <div className='space-y-2'>
-                            <p>Product: {item.product.title}</p>
-                            <p>Price: Rs.{item.product.price}</p>
+                            <p>Product: {item.product?.title}</p>
+                            <p>Price: Rs.{item.product?.price}</p>
                             <p>Quantity: {item.quantity}</p>
                             <hr />
                         </div>
