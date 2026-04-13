@@ -49,7 +49,7 @@ export default function AddToCart({ product }) {
         </div>
        
 
-        <Button disabled={ user.role === user.admin || !user } size='lg' onClick={handleCart} className={'bg-green-600'}>Add To Cart</Button>
+        <Button disabled={ user.role === 'admin' || !user } size='lg' onClick={handleCart} className={'bg-green-600'}>Add To Cart</Button>
 
         
 

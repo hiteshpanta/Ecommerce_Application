@@ -19,7 +19,7 @@ export default function CheckOutPart({ carts }) {
                 token: user.token,
                 body: {
                     products: carts.map((item) => ({
-                        productId: item.id,
+                        product: item.id,
                         quantity: item.qty,
                     })),
                     totalAmount
@@ -53,8 +53,10 @@ export default function CheckOutPart({ carts }) {
           </div>
         </div>
 
-        <ShowDialog detail={'You want to buy this products'}>
-            <Button disabled={isLoading} className="mt-9 bg-green-500">
+        <ShowDialog
+        func={handleOrder}
+         detail={'You want to buy this products'}>
+            <Button disabled={isLoading || carts.length ===0} className="mt-9 bg-green-500">
                 { isLoading ? <Spinner /> : "CheckOut"}
             </Button>
 

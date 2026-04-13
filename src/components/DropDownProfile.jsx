@@ -68,6 +68,12 @@ export default function DropDownProfile({ user }) {
                   case 'Sign Out':
                     dispatch(removeUser());
                   break;
+                  case 'Cart':
+                    nav('/checkout')
+                    break;
+                    case 'Profile':
+                      nav('/profile')
+                      break;
                   case 'admin-panel':
                     nav('/admin-panel')
                   break;

@@ -14,9 +14,10 @@ const productApi = mainApi.injectEndpoints({
         }),
 
         getProducts: builder.query({
-            query: () => ({
+            query: (query) => ({
                 url: '/products',
                 method: 'GET',
+                params: query
             }),
             providesTags: ['product']
         }),
