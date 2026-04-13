@@ -1,12 +1,85 @@
-import Product from "../models/Product.js";
+import Product, { brands, categories } from "../models/Product.js";
 import fs from 'fs';
 
 export const getProducts = async (req,res) => {
+
     try {
-        const products = await Product.find({})
+
+        const excludeFields = ['page', 'limit','sort', 'fields', 'skip', 'search'];
+        let queryObj = {...req.query};
+
+        excludeFields.forEach((val) => {
+            delete queryObj[val];
+        })
+
+
+
+        if (req.query.search) {
+            const searchText = req.query.search;
+
+            if (categories.some((name) => name.toLowerCase() === searchText.toLowerCase())) {
+                queryObj.category = { $regex: searchText, $options: 'i'};
+            } else if (brands.some((name) => name.toLowerCase() === searchText.toLowerCase())) {
+                queryObj.brand = { $regex: searchText, $options: 'i'};
+            } else {
+                queryObj.title = { $regex: searchText, $options: 'i'}
+            }
+        };
+
+
+
+
+        // { 'rating[gt]': '4'}
+        // {rating: {$gt: 4 }}
+        const output = Object.entries(queryObj).reduce((acc, [key,value]) => {
+            const match = key.match(/^(.+)\[(.+)\]$/);
+            if(match) {
+                const fields =match[1];
+                const operator = `$${match[2]}`;
+                const parsedValue = isNaN(value) ? value : Number(value);
+
+                acc[fields] = { [operator]: parsedValue };
+            } else {
+                acc[key] = value;
+            }
+            return acc;
+        }, {});
+
+        console.log(output)
+
+
+
+
+        let query = Product.find(output);
+
+        if (req.query.sort) {
+            const sortBy = req.query.sort.split(',').join(' ');
+            query = query.sort(sortBy);
+        }
+
+        if (req.query.fields) {
+            const fields = req.query.fields.split(',').join(' ');
+            query = query.select(fields);
+
+
+        }
+
+        const page = req.query.page || 1;
+        // const limit = req.top5 ? 5 : req.query.limit || 10;
+        const limit = req.query.limit || 10;
+        const skip = (page - 1) * 10;
+        // query = query.skip(skip).limit(limit);
+
+        const total = await Product.countDocuments();
+
+
+        const products = await query.skip(skip).limit(limit);
+
         return res.status(200).json({
             status: 'success',
+            total,
             products,
+            totalPages: Math.ceil(total / limit)
         });
     } catch (err) {
         return res.status(404).json({

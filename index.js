@@ -6,12 +6,15 @@ import orderRoutes from './routes/orderRoutes.js';
 import nodemailer from 'nodemailer';
 import fileUpload from 'express-fileupload';
 import cors from 'cors';
+import dotenv from 'dotenv';
 
 const app = express();
 
 const port = 5000;
 
-mongoose.connect('mongodb+srv://hiteshpant50:alright@cluster0.fbhzw9j.mongodb.net/Ercel_Store').then((val)=>{
+dotenv.config({ quiet: true })
+
+mongoose.connect(process.env.DB_URL).then((val)=>{
     app.listen(port,()=>{
         console.log(`connected and server running on port ${port}`)
     });
@@ -19,7 +22,10 @@ mongoose.connect('mongodb+srv://hiteshpant50:alright@cluster0.fbhzw9j.mongodb.ne
     console.log(err);
 });
 
-app.use(cors());
+app.use(cors({
+    origin: []
+}   
+));
 app.use(express.json());
 
 app.use(fileUpload({
@@ -30,11 +36,11 @@ app.use(fileUpload({
 app.use(express.static('uploads'))
 
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gamil.com',
+    host: 'smtp.gmail.com',
     port: 587,
     secure: false,
     auth: {
-        user: 'pantahitesh@gamil.com',
+        user: 'pantahitesh@gmail.com',
         pass: 'app password'
     }
 })

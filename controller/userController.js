@@ -3,6 +3,54 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 
+export const getUser = async (req,res) => {
+    try {
+        const user =await User.findById(req.userId).select('-password');
+        return res.status(200).json({
+            status: 'success',
+            user
+        });
+        
+    } catch (err) {
+        return res.status(500).json({
+            status: 'error',
+            message: err.message
+        })
+        
+    }
+}
+
+
+export const updateProfile = async (req,res) => {
+    const { email, username } = req.body ?? {};
+
+
+    try {
+        const isExist = await User.findById(req.userId);
+        if (!isExist) return res.status(404).json({
+            status: 'error',
+            message: 'user doesn\'t exist'
+        });
+
+        isExist.username = username || isExist.username;
+        isExist.email = email || isExist.email;
+
+        await isExist.save();
+
+        return res.status(200).json({
+            status: 'Success',
+            message: 'profile updated successfully'
+        })
+    } catch (err) {
+        return res.status(500).json({
+            status: 'Error',
+            message: err.message
+        });
+        
+    }
+
+}
+
 export const loginUser = async (req,res) => {
     const { email, password,username } = req.body ?? {};
     try {
