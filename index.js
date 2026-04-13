@@ -23,7 +23,7 @@ mongoose.connect(process.env.DB_URL).then((val)=>{
 });
 
 app.use(cors({
-    origin: []
+    origin: [ 'https://ecommerce-application-peach.vercel.app/', 'http://localhost:5000']
 }   
 ));
 app.use(express.json());
